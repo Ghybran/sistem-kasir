@@ -9,63 +9,55 @@ use App\Models\Orderan;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
+
 {
-    function men()
+    public function order(Request $request)
     {
-     $menu=Menu::all();
-     return view('admin.halaman',compact('menu'));
-    }
-    function ord()
-    {
-     $orderan= new Orderan([
-        'pemesan'=>request('pemesan'),
-        'id_menu'=>request('id_menu'),
-        'total'=>request('total')
-     ]);
-     $orderan->save();
-     return redirect()->back()->with('succes','orderan berhasil');
-    }
+        $orders = collect(session('orders', []));
 
-
-
-
-
-    public function store(Request $request)
-    {
-        // Validasi data input
-        $request->validate([
-            'pemesan' => 'required|string',
-            'items' => 'required|array',
-            'items.*.id_menu' => 'required|integer|exists:menu,id',
-        ]);
-
-        $total = 0;
-
-        // Hitung total harga berdasarkan id_menu
-        foreach ($request->input('item') as $item) {
-            $menu = Menu::findOrFail($item['id_menu']);
-            $total += $menu->price;
+        if ($request->has('orderItem')) {
+            $parts = explode('-', $request->input('orderItem'));
+            if (count($parts) === 2) {
+                [$item, $price] = $parts;
+                $orders->push(['item' => $item, 'price' => (int) $price]);
+            }
         }
 
-        // Buat pesanan baru
-        foreach ($request->input('item') as $item) {
-            $order = new Order();
-            $order->pemesan = $request->input('pemesan');
-            $order->id_menu = $item['menu'];
-            $order->total = $total;
-            $order->save();
+        $totalPrice = $orders->sum('price');
+
+        if ($request->has('submitOrder')) {
+            $request->validate([
+                'pemesan' => 'required',
+            ]);
+
+            $pemesan = $request->input('pemesan');
+
+            Order::create([
+                'pemesan' => $pemesan,
+                'menu' => json_encode($orders),
+                'total' => $totalPrice,
+            ]);
+
+            session()->forget('orders');
+
+            return back()->with('message', 'Pesanan berhasil dikirim!');
         }
 
-        // Redirect atau kembalikan response sesuai kebutuhan
-        return redirect()->back()->with('success', 'Pesanan berhasil dibuat.');
+        session(['orders' => $orders]);
+
+        return back()
+            ->with('orderSummary', $orders)
+            ->with('totalPrice', $totalPrice);
     }
 
-    function hasil()
+    public function deleteOrderItem(Request $request)
     {
-     $hasil=Order::all();
-     foreach ($hasil as $order) {
-        $order->menu = json_decode($order->menu);
-    }
-     return view('admin.orderan',compact('hasil'));
+        session()->forget('orders');
+
+        return back()->with('message', 'Semua pesanan telah dihapus.')
+                     ->with('orderSummary', [])
+                     ->with('totalPrice', 0);
     }
 }
+
+

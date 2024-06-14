@@ -37,9 +37,11 @@ Route::middleware(['admin'])->group(function (){
     Route::post('update_menu',[MenuController::class, 'update_menu']);
 
 
-    Route::post('/order', [MenuController::class, 'order']);
-    Route::get('/m', [OrderController::class, 'hasil']);
+    Route::post('/order', [OrderController::class, 'order']);
+Route::post('/order/delete', [OrderController::class, 'deleteOrderItem']);
 
+    // Route::post('/order', [OrderController::class, 'order']);
+    // Route::post('/order/cancel', [OrderController::class, 'cancel']);
     Route::get('halaman',[OrderController::class,'men']);
 
     // Page Orderan
@@ -52,7 +54,9 @@ Route::middleware(['admin'])->group(function (){
 
 
 
-
+Route::get('/session/tampil',[OrderController::class,'tampilkanSession']);
+Route::get('/session/buat',[OrderController::class,'buatSession']);
+Route::get('/session/hapus',[OrderController::class,'hapusSession']);
 });
 Route::middleware(['master'])->group(function (){
     Route::get('dashboard-master',[MasterController::class,'da_mas'])->name('dashboard.master');
