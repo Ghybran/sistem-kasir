@@ -3,6 +3,7 @@
         <div class="relative overflow-x-auto">
             <form action="{{ url('/order') }}" method="POST">
                 @csrf
+                <!-- Table for Menu Items -->
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -27,7 +28,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Hidden Input to Store Orders -->
                 <input type="hidden" name="orders" value="{{ old('orders') ?? '' }}">
+
+                <!-- Order Summary Section -->
                 <div class="mt-4 p-4 border rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
                     <h2 class="text-xl mb-2">Order Summary</h2>
                     <div id="order-summary">
@@ -37,29 +42,38 @@
                                     <div>
                                         Menu: {{ $order['item'] }}, Harga: Rp {{ number_format($order['price'], 0, ',', '.') }}
                                     </div>
-                                    </div>
-                                    <form action="{{ url('/order/delete') }}" method="POST" class="inline">
+                                    <!-- Form for Deleting Single Order Item -->
+                                    <form action="{{ url('/order/deleteone') }}" method="POST" class="inline">
                                         @csrf
                                         <input type="hidden" name="index" value="{{ $index }}">
                                         <button type="submit" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
                                     </form>
-                                    @endforeach
-                                    @endif
-                                    </div>
-                                    <div id="order-total" class="mt-2">
-                                        @if (session('totalPrice'))
-                                        Total Harga: Rp {{ number_format(session('totalPrice'), 0, ',', '.') }}
-                                        @endif
-                                        </div>
-                                        <div class="mt-4">
-                                            <label for="pemesan">Pemesan:</label>
-                                            <input type="text" id="pemesan" name="pemesan" class="border rounded px-2 py-1">
-                                            <button type="submit" name="submitOrder" value="" class="focus:outline-none text-white
-                                            bg-green-700 hover:bg-green-800 focus:ring-4
-                                            focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2
-                                            dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900">Submit Order</button>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
 
-                                            </div>
+                    <!-- Delete All Button -->
+                    @if (session('orderSummary'))
+                        <form action="{{ url('/order/delete') }}" method="POST" class="mt-4">
+                            @csrf
+                            <button type="submit" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete All</button>
+                        </form>
+                    @endif
+
+                    <!-- Total Price Section -->
+                    <div id="order-total" class="mt-2">
+                        @if (session('totalPrice'))
+                            Total Harga: Rp {{ number_format(session('totalPrice'), 0, ',', '.') }}
+                        @endif
+                    </div>
+
+                    <!-- Customer Information and Submit Button -->
+                    <div class="mt-4">
+                        <label for="pemesan">Pemesan:</label>
+                        <input type="text" id="pemesan" name="pemesan" class="border rounded px-2 py-1">
+                        <button type="submit" name="submitOrder" value="" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900">Submit Order</button>
+                    </div>
                 </div>
             </form>
         </div>

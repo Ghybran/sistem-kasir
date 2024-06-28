@@ -15,7 +15,7 @@
                                 </p>
                             </header>
 
-                            <form method="post" action="insert" class="mt-6 space-y-6">
+                            <form method="post" action="add" class="mt-6 space-y-6">
                                 @if (session('success'))
                                     <div class="alert alert-success">
                                         {{ session('success') }}

@@ -50,13 +50,35 @@ class OrderController extends Controller
             ->with('totalPrice', $totalPrice);
     }
 
-    public function deleteOrderItem(Request $request)
+    public function deleteall(Request $request)
     {
         session()->forget('orders');
 
         return back()->with('message', 'Semua pesanan telah dihapus.')
                      ->with('orderSummary', [])
                      ->with('totalPrice', 0);
+    }
+
+
+
+
+    public function deleteone(Request $request)
+    {
+        $index = $request->input('index');
+        $orderSummary = session('orderSummary', []);
+
+        if (isset($orderSummary[$index])) {
+            unset($orderSummary[$index]);
+            // Reindex the array
+            $orderSummary = array_values($orderSummary);
+            session(['orderSummary' => $orderSummary]);
+
+            // Update the total price
+            $totalPrice = array_sum(array_column($orderSummary, 'price'));
+            session(['totalPrice' => $totalPrice]);
+        }
+
+        return back()->with('message', 'Pesanan telah dihapus.');
     }
 }
 

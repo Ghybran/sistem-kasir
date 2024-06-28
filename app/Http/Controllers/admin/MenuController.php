@@ -43,7 +43,7 @@ class MenuController extends Controller
         'price'=>request('price'),
         ]);
         $add->save();
-        return redirect()->back()->with('succes','berhasil');
+        return redirect('dashboard-admin')->with('succes','berhasil');
     }
 
    function update_menu(Request $req)
