@@ -31,7 +31,6 @@
                                         <option value="admin" {{ $t->role == "admin" ? 'selected' : '' }}>Admin</option>
                                     </select>
                                 </td>
-                                <td scope="col" class="px-6 py-3">{{ $t->password }}</td>
                                 <td scope="col" class="px-6 py-3">
                                     <x-primary-button>{{ __('Save') }}</x-primary-button>
                                 </td>
@@ -41,5 +40,12 @@
                 </tbody>
             </table>
         </div>
+        <br>
+        <div>
+            <a href="tambah_pegawai"  class="text-white bg-gradient-to-r from-cyan-400 via-cyan-500
+                to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300
+                dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Back to menu</a>
+        </div>
+
     </main>
 </x-app-layout>

@@ -31,7 +31,7 @@
                                     @if(is_array($item->menu))
                                         <ul>
                                             @foreach ($item->menu as $menuItem)
-                                                <li>{{ $menuItem['item'] }} - {{ $menuItem['price'] }}</li>
+                                                <li>{{ $menuItem['item'] }} = {{ $menuItem['price'] }}</li>
                                             @endforeach
                                         </ul>
                                     @else

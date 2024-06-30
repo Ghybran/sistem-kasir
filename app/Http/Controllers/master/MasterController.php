@@ -14,6 +14,15 @@ class MasterController extends Controller
         $orders=Order::all();
      return view('master.dashboard',compact('orders'));
     }
+    // function updateorder(Request $req)
+    // {
+    //     $orders=Order::find($req->input('id'));
+    //     $orders->menu=$req->input('menu');
+    //     $orders->total=$req->input('total');
+    //     $orders->pemesan=$req->input('pemesan');
+    //     $orders->save();
+    //     return redirect()->back();
+    // }
 
     // MENU
     function menu()

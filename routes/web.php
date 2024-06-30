@@ -60,8 +60,10 @@ Route::get('/session/tampil',[OrderController::class,'tampilkanSession']);
 Route::get('/session/buat',[OrderController::class,'buatSession']);
 Route::get('/session/hapus',[OrderController::class,'hapusSession']);
 });
+
 Route::middleware(['master'])->group(function (){
     Route::get('dashboard-master',[MasterController::class,'da_mas'])->name('dashboard.master');
+    Route::post('updateorder',[MasterController::class,'updateorder'])->name('updateorder');
     // menu
     Route::get('menu',[MasterController::class,'menu']);
     Route::post('/updatemenu', [MenuController::class, 'update_menu'])->name('updatemenu');
@@ -74,6 +76,8 @@ Route::middleware(['master'])->group(function (){
 
     Route::get('role',[RoleController::class,'role']);
     Route::post('update',[RoleController::class,'update']);
+    Route::get('tambah_pegawai',[RoleController::class,'hadd']);
+    Route::post('add_pegawai',[RoleController::class,'add_pegawai']);
 
 
 
